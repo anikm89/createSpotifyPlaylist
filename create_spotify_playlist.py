@@ -94,11 +94,11 @@ class MyTracks:
 
         if search_str_len > self.poem_len:
             self.input_str_list = [" ".join(search_str[i:i + self.poem_len])
-                              for i in range(0, search_str_len, self.poem_len)]
+                                   for i in range(0, search_str_len, self.poem_len)]
             str_len = len(self.input_str_list)
             if len(self.input_str_list[str_len - 1].split(" ")) != self.poem_len:
-                self.input_str_list[str_len -
-                               1] = " ".join(self.input_str_list[str_len - 2:str_len])
+                self.input_str_list[str_len-1] = \
+                    " ".join(self.input_str_list[str_len - 2:str_len])
                 self.input_str_list.pop(str_len - 2)
             print self.input_str_list
             return self.input_str_list
