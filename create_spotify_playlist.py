@@ -80,11 +80,11 @@ class MyTracks:
          1. It parses through the string using a regular expressiosn removes unwanted characters
             and splits the string into a list.
             "if I can't let it go out of my mind" =>
-                 ['if', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind']
+                 ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind']
 
          2. It then groups them into a minimum size of 3
-            ['if', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind'] =>
-                 ['"if can't let", 'it go out', 'of my mind']
+            ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind'] =>
+                 ["if i can't", 'let it go', 'out of my mind']
 
             if the overall length is <=3, it will keep the string as its
             eg: ["let", "it"] => ["let it"]
