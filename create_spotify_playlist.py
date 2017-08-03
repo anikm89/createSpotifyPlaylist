@@ -23,6 +23,7 @@ class MyTracks:
         """
         self.tracks_not_found = []
         self.in_ = []
+        self.input_str_list = []
         self.tracks_dict = {}
         self.poem_len = 3
         self.errmsg_invalid_input = "Please enter the valid input, exiting the script"
@@ -54,6 +55,50 @@ class MyTracks:
             print errmsg
             raise SystemExit()
 
+    def parse_input(self, search_str):
+        """
+        This function accepts the input string provided by the user.
+         1. It parses through the string using a regular expressiosn removes unwanted characters
+            and splits the string into a list.
+            "if i can't let it go out of my mind" =>
+                 ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind']
+
+         2. It then groups them into a minimum size of 3
+            ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind'] =>
+                 ["if i can't", 'let it go', 'out of my mind']
+
+            if the overall length is <=3, it will keep the string as its
+            eg: ["let", "it"] => ["let it"]
+
+        Args:
+            :param search_str(string): text provided by the user.
+                               Eg: "if I can't let it go out of my mind"
+
+        Returns:
+            input_str_list, a list of small poems.
+            Eg: ["if i can't", 'let it go', 'out of my mind']
+        """
+        search_str = search_str.decode('string_escape')
+        regex = r'[a-zA-Z0-9\']+'
+        search_str = re.findall(regex, search_str)
+        search_str_len = len(search_str)
+        self.input_str_list = []
+
+        if search_str_len > self.poem_len:
+            self.input_str_list = [" ".join(search_str[i:i + self.poem_len])
+                              for i in range(0, search_str_len, self.poem_len)]
+            str_len = len(self.input_str_list)
+            if len(self.input_str_list[str_len - 1].split(" ")) != self.poem_len:
+                self.input_str_list[str_len -
+                               1] = " ".join(self.input_str_list[str_len - 2:str_len])
+                self.input_str_list.pop(str_len - 2)
+            print self.input_str_list
+            return self.input_str_list
+        else:
+            self.input_str_list.append(" ".join(search_str))
+            print self.input_str_list
+            return self.input_str_list
+
     def getinput(self):
         """
         This function requests customer to provide input text to search for tracks.
@@ -84,50 +129,6 @@ class MyTracks:
             print 'Command line input was not provided'
             input_str = str(raw_input("please enter query string here :"))
             return input_str
-
-    def parse_input(self, search_str):
-        """
-        This function accepts the input string provided by the user.
-         1. It parses through the string using a regular expressiosn removes unwanted characters
-            and splits the string into a list.
-            "if i can't let it go out of my mind" =>
-                 ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind']
-
-         2. It then groups them into a minimum size of 3
-            ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind'] =>
-                 ["if i can't", 'let it go', 'out of my mind']
-
-            if the overall length is <=3, it will keep the string as its
-            eg: ["let", "it"] => ["let it"]
-
-        Args:
-            :param search_str: text provided by the user.
-                               Eg: "if I can't let it go out of my mind"
-
-        Returns:
-            input_str_list, list of small poems.
-            Eg: ["if i can't", 'let it go', 'out of my mind']
-        """
-        search_str = search_str.decode('string_escape')
-        regex = r'[a-zA-Z0-9\']+'
-        search_str = re.findall(regex, search_str)
-        search_str_len = len(search_str)
-
-        if search_str_len > self.poem_len:
-            input_str_list = [" ".join(search_str[i:i + self.poem_len])
-                              for i in range(0, search_str_len, self.poem_len)]
-            str_len = len(input_str_list)
-            if len(input_str_list[str_len - 1].split(" ")) != self.poem_len:
-                input_str_list[str_len -
-                               1] = " ".join(input_str_list[str_len - 2:str_len])
-                input_str_list.pop(str_len - 2)
-            print input_str_list
-            return input_str_list
-        else:
-            self.in_ = []
-            self.in_.append(" ".join(search_str))
-            print self.in_
-            return self.in_
 
     def tracksearch(self, search_str, spotify):
         """
