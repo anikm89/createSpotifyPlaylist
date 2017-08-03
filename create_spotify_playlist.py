@@ -20,9 +20,17 @@ class MyTracks:
         """
         This is the constructor for class MyTracks,
         handles variable initialization
+
+        Declared string error messages here as constants
+        in order to miantain consistency
+
+        params:
+            tracks_not_found(list): sotres the list of poems couldn't find a matching track
+            input_str_list(list): list of short poems
+            tracks_dict(dict) : stores tracks for each unique short poem
+            poem_len(const): Short poem length
         """
         self.tracks_not_found = []
-        self.in_ = []
         self.input_str_list = []
         self.tracks_dict = {}
         self.poem_len = 3
