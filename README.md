@@ -7,8 +7,8 @@
 	scripts prompts the user to provide a query text
 
 
-## Installation ##
-pip install Spotify
+## Dependency / Installation ##
+pip install spotipy
 
 ## Quick Start Modules ##
 * create_spotify_playlist.py:
