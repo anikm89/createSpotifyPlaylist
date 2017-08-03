@@ -8,12 +8,19 @@
 
 
 ## Dependency / Installation ##
-pip install spotipy
+* pip install spotipy
+* Create a spotify application from the url :
+https://developer.spotify.com/my-applications/#!/applications/create
+	* Retrieve client ID, client Secret from the App.
+
 
 ## Quick Start Modules ##
 * create_spotify_playlist.py:
 	* Main class file
 	* reads user input -> parses input -> authorizes spotify -> search for tracks
+	* Provide the above fetch client id & secret key to the global variables created in class MyTrack
+		* client_id = " "
+		* client_secret = " "
 	* Following will give examples on how to execute the above script:
 		* help on arguments: python create_spotify_playlist.py -h
 		* Eg 1: python create_spotify_playlist.py "if i can't let it go out of my mind"
