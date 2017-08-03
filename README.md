@@ -1,10 +1,10 @@
 # Python Application to Create Spotify Playlist #
 
 ## Description: ##
-* Application can takes any block of text
-* creates an playlist of Spotify tracks using the Spotify API.
+* Application can take any block of text
+* It creates a playlist of Spotify tracks using the Spotify API.
 * Input to the application is provided in the form of command line arguments, if not provided
-	scripts prompts the user to provide a query text
+	script will prompt the user to provide a text query
 
 
 ## Dependency / Installation ##
@@ -24,7 +24,7 @@ pip install spotipy
 
 		* Eg 2: python create_spotify_playlist.py
 			* when no argument provided the script will prompt user to enter the input (shown below)
-			* please enter query string here : "if i can't let it go out of my mind"
+			* please enter query string here : if i can't let it go out of my mind
 
 ## Testing ##
 * test_end_to_end.py
@@ -35,6 +35,6 @@ pip install spotipy
 	* Performs unittest
 	* execution: python test_unitest.py
 
-### Application Assumption ###
-* Splits the user input into short text of size 3
+### Application Assumptions ###
+* Splits the user input into short text of size 3 or more
 * filter duplicate tracks
