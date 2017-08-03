@@ -26,6 +26,7 @@ pip install spotipy
 			* when no argument provided the script will prompt user to enter the input (shown below)
 			* please enter query string here : "if i can't let it go out of my mind"
 
+## Testing ##
 * test_end_to_end.py
 	* Performs end to end testing of the application
 	* execution: python test_end_to_end.py
