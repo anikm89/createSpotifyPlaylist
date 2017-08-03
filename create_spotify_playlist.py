@@ -1,8 +1,10 @@
+"""
+Create Spotify Playlist
+"""
 import argparse
 import re
 import spotipy
 import spotipy.oauth2 as oauth2
-
 
 class MyTracks:
     """
@@ -90,22 +92,24 @@ class MyTracks:
         regex = r'[a-zA-Z0-9\']+'
         search_str = re.findall(regex, search_str)
         search_str_len = len(search_str)
+        remainder = search_str_len % self.poem_len
         self.input_str_list = []
 
         if search_str_len > self.poem_len:
             self.input_str_list = [" ".join(search_str[i:i + self.poem_len])
                                    for i in range(0, search_str_len, self.poem_len)]
             str_len = len(self.input_str_list)
-            if len(self.input_str_list[str_len - 1].split(" ")) != self.poem_len:
-                self.input_str_list[str_len-1] = \
-                    " ".join(self.input_str_list[str_len - 2:str_len])
-                self.input_str_list.pop(str_len - 2)
+            if remainder != 0:
+                remain = " ".join(self.input_str_list[str_len - 2:])
+                self.input_str_list[str_len - 2:] = []
+                self.input_str_list.append(remain)
             print self.input_str_list
             return self.input_str_list
         else:
             self.input_str_list.append(" ".join(search_str))
             print self.input_str_list
             return self.input_str_list
+
 
     def getinput(self):
         """
@@ -213,7 +217,6 @@ class MyTracks:
             self.tracksearch(input_str, spotify)
         except TypeError:
             print self.errmsg_invalid_input
-
 
 if __name__ == '__main__':
     create_playlist = MyTracks()
