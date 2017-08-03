@@ -24,7 +24,7 @@ pip install Spotify
 
 		* Eg 2: python create_spotify_playlist.py
 			* when no argument provided the script will prompt user to enter the input (shown below)
-				please enter query string here : "if i can't let it go out of my mind"
+			* please enter query string here : "if i can't let it go out of my mind"
 
 * test_end_to_end.py
 	* Performs end to end testing of the application
