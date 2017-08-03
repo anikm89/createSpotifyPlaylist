@@ -3,10 +3,14 @@ import re
 import spotipy
 import spotipy.oauth2 as oauth2
 
-class MyTracks:
 
+class MyTracks:
     """
-    user creadentials required for spotify API access
+    This class helps user to create a Spotify playlist, based
+    on the input string block provided.
+
+    Global:
+        user creadentials required for spotify API access
     """
     client_id = "b7b40ecaa6d24e83bad635789982e49a"
     client_secret = "ac16b9958e68445f8c13c2b6a9970c9b"
@@ -14,8 +18,8 @@ class MyTracks:
 
     def __init__(self):
         """
-        This is the constructor for class MyTracks, handles variable initialization
-        :return:
+        This is the constructor for class MyTracks,
+        handles variable initialization
         """
         self.tracks_not_found = []
         self.in_ = []
@@ -30,13 +34,16 @@ class MyTracks:
         This function handles authentication for spotify webapi.
         provides user credentials to get access and return a response token object
 
-        :param client_id:user credential,global variable
-        :param client_secret:user credential,global variable
-        :return:spotify authorization object
+        Args:
+            :param client_id: user credential,global variable
+            :param client_secret: user credential,global variable
+
+        Return:
+            spotify authorization object (token)
         """
         try:
-            credentials = oauth2.SpotifyClientCredentials\
-                            (client_id=client_id, client_secret=client_secret)
+            credentials = oauth2.SpotifyClientCredentials(
+                client_id=client_id, client_secret=client_secret)
             token = credentials.get_access_token()
             spotify = spotipy.Spotify(auth=token)
             return spotify
@@ -53,7 +60,11 @@ class MyTracks:
         It handles user input either in the form of command line, in case not provided
         prompts user to enter the query string
 
-        :return:input_str, string value from command line or user provided input
+        Returns:
+            input_str, string value from command line or user provided input
+            for eg: "if I can't let it go out of my mind"
+                    "     "
+                    "Hello world"
         """
         parser = argparse.ArgumentParser()
         parser.add_argument('string',
@@ -79,7 +90,7 @@ class MyTracks:
         This function accepts the input string provided by the user.
          1. It parses through the string using a regular expressiosn removes unwanted characters
             and splits the string into a list.
-            "if I can't let it go out of my mind" =>
+            "if i can't let it go out of my mind" =>
                  ['if', 'i', "can't", 'let', 'it', 'go', 'out', 'of', 'my', 'mind']
 
          2. It then groups them into a minimum size of 3
@@ -89,8 +100,13 @@ class MyTracks:
             if the overall length is <=3, it will keep the string as its
             eg: ["let", "it"] => ["let it"]
 
-        :param search_str: text provided by the user
-        :return:input_str_list, list of small poems
+        Args:
+            :param search_str: text provided by the user.
+                               Eg: "if I can't let it go out of my mind"
+
+        Returns:
+            input_str_list, list of small poems.
+            Eg: ["if i can't", 'let it go', 'out of my mind']
         """
         search_str = search_str.decode('string_escape')
         regex = r'[a-zA-Z0-9\']+'
@@ -98,12 +114,13 @@ class MyTracks:
         search_str_len = len(search_str)
 
         if search_str_len > self.poem_len:
-            input_str_list = [" ".join(search_str[i:i+self.poem_len])
+            input_str_list = [" ".join(search_str[i:i + self.poem_len])
                               for i in range(0, search_str_len, self.poem_len)]
             str_len = len(input_str_list)
-            if len(input_str_list[str_len-1].split(" ")) != self.poem_len:
-                input_str_list[str_len-1] = " ".join(input_str_list[str_len-2:str_len])
-                input_str_list.pop(str_len-2)
+            if len(input_str_list[str_len - 1].split(" ")) != self.poem_len:
+                input_str_list[str_len -
+                               1] = " ".join(input_str_list[str_len - 2:str_len])
+                input_str_list.pop(str_len - 2)
             print input_str_list
             return input_str_list
         else:
@@ -114,11 +131,12 @@ class MyTracks:
 
     def tracksearch(self, search_str, spotify):
         """
-        This function utilizes the provided list of small poems (query strings)
+        This function utilizes the provided list of small poems (query strings).
+        Eg: ["if i can't", 'let it go', 'out of my mind']
         and spotify authorization token. It then make calls to spotify API
         searching for tracks related to the query passed.
 
-        The response is in JSON format. Further filtering into the JSON schema to print
+        The response is in JSON format. Further filtering into the JSON schema to returns
         the required url.
 
         A check is enabled to store the poem(query string) in a dictionary
@@ -127,12 +145,25 @@ class MyTracks:
         dictionary format:
         {"let it go": "https://open.spotify.com/track/13HVjjWUZFaWilh2QUJKsP"}
 
-        :param search_str:list of small poems
-        :param spotify:Authorization token object, to call spotify api methods
-        :return:tracks_dict, dictionary of small poems with their track url's
-        """
-        self.tracks_list = []
+        Args:
+            :param search_str(list): list of small poems.
+                                   Eg: ["if i can't", 'let it go', 'out of my mind']
+            :param spotify(object): Authorization token object, to call spotify api methods
+                                    authenticate_spotify() method
+        Print:
+            the result url in real time
 
+        Returns:
+            tracks_dict, dictionary of small poems with their track url's
+            {
+                "if i can't": "https://open.spotify.com/track/7JeKXMQKm6GoLGTkNy2jZ0",
+                "let it go": "https://open.spotify.com/track/13HVjjWUZFaWilh2QUJKsP",
+                "out of my mind": "https://open.spotify.com/track/7m4HUtdXRUHEitLIqbVWxf"
+            }
+
+            tracks_not_found: contains the list of poems that couldn't find
+                              a track.
+        """
         if len(search_str) <= 1:
             if search_str[0] == '':
                 print self.errmsg_invalid_input
@@ -141,7 +172,8 @@ class MyTracks:
         for index, str_ in enumerate(search_str):
             try:
                 if str_.lower() not in self.tracks_dict:
-                    response = spotify.search(str_, limit=1, offset=0, market=None)
+                    response = spotify.search(
+                        str_, limit=1, offset=0, market=None)
                     tracks_url = response["tracks"]["items"][0]["external_urls"]["spotify"]
                     self.tracks_dict[str_.lower()] = tracks_url
                     flag = True
@@ -150,13 +182,12 @@ class MyTracks:
                 print 'No Search Query Provided exiting the script'
             except IndexError:
                 errmsg = self.errmsg_cannot_find, str_
-                self.tracks_list.append(errmsg)
-                if flag is False and index == len(search_str)-1:
+                self.tracks_not_found.append(errmsg)
+                if flag is False and index == len(search_str) - 1:
                     print self.errmsg_cannot_find, " ".join(search_str)
             except AttributeError as errmsg:
                 print errmsg
-        return self.tracks_dict, self.tracks_list
-
+        return self.tracks_dict, self.tracks_not_found
 
     def run(self):
         """
@@ -173,6 +204,7 @@ class MyTracks:
             self.tracksearch(input_str, spotify)
         except TypeError:
             print self.errmsg_invalid_input
+
 
 if __name__ == '__main__':
     create_playlist = MyTracks()
